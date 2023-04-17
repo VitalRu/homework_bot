@@ -57,7 +57,7 @@ def send_message(
         raise exceptions.SendMessageException(error)
 
 
-def get_api_answer(timestamp: int) -> dict:
+def get_api_answer(timestamp: int) -> dict[str, list[dict[str, str]]]:
     """Делает запрос к API сервиса Практикум.Домашка."""
     params = {'from_date': timestamp}
     try:
@@ -114,15 +114,15 @@ def parse_status(homework: dict) -> str:
         raise KeyError(message)
     homework_name = homework['homework_name']
     homework_status = homework['status']
-    if homework_status in HOMEWORK_VERDICTS:
-        verdict = HOMEWORK_VERDICTS[homework_status]
-        return (f'Изменился статус проверки работы '
-                f'"{homework_name}". {verdict}')
-    message = (f'Передан неизвестный статус '
-               f'домашней работы "{homework_status}"')
-    logger.error(message)
-    logger.debug(homework_status)
-    raise exceptions.ParseStatusException(message)
+    if homework_status not in HOMEWORK_VERDICTS:
+        message = (f'Передан неизвестный статус '
+                   f'домашней работы "{homework_status}"')
+        logger.error(message)
+        logger.debug(homework_status)
+        raise exceptions.ParseStatusException(message)
+    verdict = HOMEWORK_VERDICTS[homework_status]
+    return (f'Изменился статус проверки работы '
+            f'"{homework_name}". {verdict}')
 
 
 def main():
