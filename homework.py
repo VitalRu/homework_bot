@@ -118,7 +118,6 @@ def parse_status(homework: dict) -> str:
         message = (f'Передан неизвестный статус '
                    f'домашней работы "{homework_status}"')
         logger.error(message)
-        logger.debug(homework_status)
         raise exceptions.ParseStatusException(message)
     verdict = HOMEWORK_VERDICTS[homework_status]
     return (f'Изменился статус проверки работы '
