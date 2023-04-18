@@ -153,10 +153,10 @@ def main():
             message = f'Сбой в работе программы: {error}'
             logger.error(message)
             if error_message != str(error):
-                error_message = str(error)
                 try:
+                    error_message = str(error)
                     send_message(bot, message)
-                except telegram.error.TelegramError as error:
+                except Exception as error:
                     logger.error(f'Не удалось отправить '
                                  f'сообщение об ошибке:{error}')
         finally:
